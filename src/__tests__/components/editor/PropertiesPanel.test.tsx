@@ -9,6 +9,9 @@ vi.mock('@/lib/editor-store', () => ({
 // Mock lucide-react
 vi.mock('lucide-react', () => ({
   Trash2: () => <span data-testid="icon-trash" />,
+  ImagePlus: () => <span data-testid="icon-image-plus" />,
+  Upload: () => <span data-testid="icon-upload" />,
+  X: () => <span data-testid="icon-x" />,
 }))
 
 import { useEditorStore } from '@/lib/editor-store'

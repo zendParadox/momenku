@@ -9,6 +9,9 @@ export type SectionType =
   | 'gifts'
   | 'footer'
   | 'custom'
+  | 'countdown'
+  | 'maps'
+  | 'music'
 
 export type HeroData = {
   title: string
@@ -89,6 +92,22 @@ export type CustomData = {
   css: string
 }
 
+export type CountdownData = {
+  title: string
+  eventDate: string
+}
+
+export type MapsData = {
+  title: string
+  address: string
+  mapsUrl: string
+}
+
+export type MusicData = {
+  title: string
+  musicUrl: string
+}
+
 export type SectionDataMap = {
   hero: HeroData
   couple: CoupleData
@@ -100,6 +119,9 @@ export type SectionDataMap = {
   gifts: GiftsData
   footer: FooterData
   custom: CustomData
+  countdown: CountdownData
+  maps: MapsData
+  music: MusicData
 }
 
 export type Section<T extends SectionType = SectionType> = {
@@ -177,6 +199,21 @@ export const SECTION_CONFIG: Record<
     label: 'Kustom',
     description: 'HTML/CSS bebas',
     icon: 'Code',
+  },
+  countdown: {
+    label: 'Hitung Mundur',
+    description: 'Timer hitung mundur acara',
+    icon: 'Clock',
+  },
+  maps: {
+    label: 'Peta',
+    description: 'Lokasi acara di peta',
+    icon: 'MapPin',
+  },
+  music: {
+    label: 'Musik',
+    description: 'Player musik undangan',
+    icon: 'Music',
   },
 }
 
@@ -258,5 +295,18 @@ export const DEFAULT_SECTION_DATA: {
   custom: {
     html: '<div class="text-center py-8"><p class="text-2xl font-cormorant">Custom Section</p></div>',
     css: '',
+  },
+  countdown: {
+    title: 'Hitung Mundur',
+    eventDate: '',
+  },
+  maps: {
+    title: 'Lokasi Acara',
+    address: 'Jl. Sudirman No. 123, Jakarta',
+    mapsUrl: '',
+  },
+  music: {
+    title: 'Musik Latar',
+    musicUrl: '',
   },
 }

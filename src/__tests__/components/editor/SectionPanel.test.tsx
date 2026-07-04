@@ -24,6 +24,9 @@ vi.mock('lucide-react', () => ({
   Trash2: () => <span />,
   Copy: () => <span />,
   Plus: () => <span data-testid="icon-plus" />,
+  Clock: () => <span />,
+  MapPin: () => <span />,
+  Music: () => <span />,
 }))
 
 import { useEditorStore } from '@/lib/editor-store'
@@ -56,11 +59,11 @@ describe('SectionPanel Component', () => {
     expect(screen.getByText('Tambah Section')).toBeInTheDocument()
   })
 
-  it('renders all 10 section type buttons in the palette', () => {
+  it('renders all 13 section type buttons in the palette', () => {
     render(<SectionPanel />)
     const sectionTypes = [
       'Hero', 'Mempelai', 'Love Story', 'Galeri Foto', 'Acara',
-      'RSVP', 'Ucapan', 'Hadiah', 'Penutup', 'Kustom',
+      'RSVP', 'Ucapan', 'Hadiah', 'Penutup', 'Kustom', 'Hitung Mundur', 'Peta', 'Musik',
     ]
     sectionTypes.forEach((label) => {
       // Each label appears in the palette buttons

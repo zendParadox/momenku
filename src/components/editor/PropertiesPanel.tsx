@@ -3,6 +3,8 @@
 import { useEditorStore } from '@/lib/editor-store'
 import type { SectionType } from '@/types/editor'
 import { Trash2 } from 'lucide-react'
+import ImageUpload from '@/components/editor/ImageUpload'
+import ImageGallery from '@/components/editor/ImageGallery'
 
 function FieldGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -105,14 +107,10 @@ function HeroProperties({ sectionId, data }: { sectionId: string; data: any }) {
         <TextInput value={data.subtitle} onChange={(v) => update('subtitle', v)} placeholder="Rina & Budi" />
       </FieldGroup>
       <FieldGroup label="Gambar Latar">
-        <TextInput
-          value={data.backgroundImage}
-          onChange={(v) => update('backgroundImage', v)}
-          placeholder="URL gambar"
+        <ImageUpload
+          currentImage={data.backgroundImage}
+          onUpload={(url) => update('backgroundImage', url)}
         />
-        <p className="text-[10px] text-stone-400 font-[family-name:var(--font-jakarta)]">
-          Paste URL gambar dari Unsplash, Imgur, dll.
-        </p>
       </FieldGroup>
       <RangeInput
         label="Opacity Overlay"
@@ -150,10 +148,9 @@ function CoupleProperties({ sectionId, data }: { sectionId: string; data: any })
         <TextInput value={data.brideParents} onChange={(v) => update('brideParents', v)} />
       </FieldGroup>
       <FieldGroup label="Foto Pasangan">
-        <TextInput
-          value={data.photo}
-          onChange={(v) => update('photo', v)}
-          placeholder="URL foto"
+        <ImageUpload
+          currentImage={data.photo}
+          onUpload={(url) => update('photo', url)}
         />
       </FieldGroup>
     </div>
@@ -198,7 +195,10 @@ function StoryProperties({ sectionId, data }: { sectionId: string; data: any }) 
             <TextInput value={item.year} onChange={(v) => updateItem(idx, 'year', v)} placeholder="Tahun" />
             <TextInput value={item.title} onChange={(v) => updateItem(idx, 'title', v)} placeholder="Judul" />
             <Textarea value={item.description} onChange={(v) => updateItem(idx, 'description', v)} rows={2} />
-            <TextInput value={item.image} onChange={(v) => updateItem(idx, 'image', v)} placeholder="URL gambar" />
+            <ImageUpload
+              currentImage={item.image}
+              onUpload={(url) => updateItem(idx, 'image', url)}
+            />
           </div>
         ))}
       </div>
@@ -238,13 +238,11 @@ function GalleryProperties({ sectionId, data }: { sectionId: string; data: any }
           ))}
         </div>
       </FieldGroup>
-      <FieldGroup label="Gambar (satu URL per baris)">
-        <textarea
-          value={data.images.join('\n')}
-          onChange={(e) => update('images', e.target.value.split('\n').filter(Boolean))}
-          rows={5}
-          className="w-full px-3 py-2 rounded-lg border border-stone-200 text-stone-800 text-xs font-[family-name:var(--font-jakarta)] focus:outline-none focus:ring-2 focus:ring-emerald-300 resize-none"
-          placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg"
+      <FieldGroup label="Gambar Galeri">
+        <ImageGallery
+          images={data.images}
+          onChange={(images) => update('images', images)}
+          maxImages={20}
         />
       </FieldGroup>
     </div>
@@ -467,6 +465,73 @@ function CustomProperties({ sectionId, data }: { sectionId: string; data: any })
   )
 }
 
+function CountdownProperties({ sectionId, data }: { sectionId: string; data: any }) {
+  const update = (k: string, v: any) => useEditorStore.getState().updateSection(sectionId, { [k]: v })
+
+  return (
+    <div className="space-y-4">
+      <FieldGroup label="Judul">
+        <TextInput value={data.title} onChange={(v) => update('title', v)} placeholder="Hitung Mundur" />
+      </FieldGroup>
+      <FieldGroup label="Tanggal Acara">
+        <input
+          type="datetime-local"
+          value={data.eventDate}
+          onChange={(e) => update('eventDate', e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border border-stone-200 text-stone-800 text-sm font-[family-name:var(--font-jakarta)] focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+        />
+      </FieldGroup>
+    </div>
+  )
+}
+
+function MapsProperties({ sectionId, data }: { sectionId: string; data: any }) {
+  const update = (k: string, v: any) => useEditorStore.getState().updateSection(sectionId, { [k]: v })
+
+  return (
+    <div className="space-y-4">
+      <FieldGroup label="Judul">
+        <TextInput value={data.title} onChange={(v) => update('title', v)} placeholder="Lokasi Acara" />
+      </FieldGroup>
+      <FieldGroup label="Alamat">
+        <TextInput value={data.address} onChange={(v) => update('address', v)} placeholder="Jl. Sudirman No. 123, Jakarta" />
+      </FieldGroup>
+      <FieldGroup label="URL Google Maps">
+        <TextInput
+          value={data.mapsUrl}
+          onChange={(v) => update('mapsUrl', v)}
+          placeholder="https://www.google.com/maps/embed?..."
+        />
+        <p className="text-[10px] text-stone-400 font-[family-name:var(--font-jakarta)]">
+          Paste URL embed dari Google Maps (bagikan &gt; sematkan peta)
+        </p>
+      </FieldGroup>
+    </div>
+  )
+}
+
+function MusicProperties({ sectionId, data }: { sectionId: string; data: any }) {
+  const update = (k: string, v: any) => useEditorStore.getState().updateSection(sectionId, { [k]: v })
+
+  return (
+    <div className="space-y-4">
+      <FieldGroup label="Judul">
+        <TextInput value={data.title} onChange={(v) => update('title', v)} placeholder="Musik Latar" />
+      </FieldGroup>
+      <FieldGroup label="URL Musik">
+        <TextInput
+          value={data.musicUrl}
+          onChange={(v) => update('musicUrl', v)}
+          placeholder="https://example.com/song.mp3"
+        />
+        <p className="text-[10px] text-stone-400 font-[family-name:var(--font-jakarta)]">
+          URL file audio (MP3, OGG, dll.)
+        </p>
+      </FieldGroup>
+    </div>
+  )
+}
+
 const PROPERTIES_MAP: Record<
   SectionType,
   React.ComponentType<{ sectionId: string; data: any }>
@@ -481,6 +546,9 @@ const PROPERTIES_MAP: Record<
   gifts: GiftsProperties,
   footer: FooterProperties,
   custom: CustomProperties,
+  countdown: CountdownProperties,
+  maps: MapsProperties,
+  music: MusicProperties,
 }
 
 export default function PropertiesPanel() {

@@ -1,8 +1,17 @@
 'use client'
 
 import type { HeroData } from '@/types/editor'
+import InlineEditable from '../InlineEditable'
 
-export default function HeroSection({ data }: { data: HeroData }) {
+export default function HeroSection({
+  data,
+  sectionId,
+  onUpdate,
+}: {
+  data: HeroData
+  sectionId: string
+  onUpdate: (data: Partial<HeroData>) => void
+}) {
   return (
     <div className="relative w-full min-h-[520px] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -83,7 +92,13 @@ export default function HeroSection({ data }: { data: HeroData }) {
           className="text-white text-4xl md:text-5xl font-light leading-tight mb-3"
           style={{ fontFamily: 'var(--theme-font-heading)' }}
         >
-          {data.title}
+          <InlineEditable
+            value={data.title}
+            onChange={(v) => onUpdate({ title: v })}
+            tag="h1"
+            className="text-white text-4xl md:text-5xl font-light leading-tight mb-3"
+            placeholder="The Wedding of"
+          />
         </h1>
 
         <div
@@ -98,7 +113,13 @@ export default function HeroSection({ data }: { data: HeroData }) {
             color: 'rgba(255,255,255,0.8)',
           }}
         >
-          {data.subtitle}
+          <InlineEditable
+            value={data.subtitle}
+            onChange={(v) => onUpdate({ subtitle: v })}
+            tag="h2"
+            className="text-3xl md:text-4xl"
+            placeholder="Rina & Budi"
+          />
         </h2>
 
         <div className="mt-8">

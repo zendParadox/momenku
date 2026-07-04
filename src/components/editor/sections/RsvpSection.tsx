@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import type { RsvpData } from '@/types/editor'
-
-export default function RsvpSection({ data }: { data: RsvpData }) {
+export default function RsvpSection({ data, sectionId, onUpdate }: { data: RsvpData; sectionId: string; onUpdate: (data: Partial<RsvpData>) => void }) {
   const [formState, setFormState] = useState({
     name: '',
     email: '',

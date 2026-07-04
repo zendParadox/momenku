@@ -19,6 +19,9 @@ import {
   Trash2,
   Copy,
   Plus,
+  Clock,
+  MapPin,
+  Music,
 } from 'lucide-react'
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -32,6 +35,9 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Gift,
   PartyPopper,
   Code,
+  Clock,
+  MapPin,
+  Music,
 }
 
 const SECTION_TYPES: SectionType[] = [
@@ -45,6 +51,9 @@ const SECTION_TYPES: SectionType[] = [
   'gifts',
   'footer',
   'custom',
+  'countdown',
+  'maps',
+  'music',
 ]
 
 export default function SectionPanel() {

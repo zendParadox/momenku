@@ -13,11 +13,14 @@ import WishesSection from './sections/WishesSection'
 import GiftsSection from './sections/GiftsSection'
 import FooterSection from './sections/FooterSection'
 import CustomSection from './sections/CustomSection'
+import CountdownSection from './sections/CountdownSection'
+import MapsSection from './sections/MapsSection'
+import MusicSection from './sections/MusicSection'
 import { GripVertical } from 'lucide-react'
 
 const SECTION_COMPONENTS: Record<
   SectionType,
-  React.ComponentType<{ data: any }>
+  React.ComponentType<{ data: any; sectionId: string; onUpdate: (data: any) => void }>
 > = {
   hero: HeroSection,
   couple: CoupleSection,
@@ -29,6 +32,9 @@ const SECTION_COMPONENTS: Record<
   gifts: GiftsSection,
   footer: FooterSection,
   custom: CustomSection,
+  countdown: CountdownSection,
+  maps: MapsSection,
+  music: MusicSection,
 }
 
 function SectionBlock({
@@ -47,6 +53,12 @@ function SectionBlock({
   onDrop: (e: React.DragEvent) => void
 }) {
   const Component = SECTION_COMPONENTS[section.type]
+  const handleUpdate = useCallback(
+    (data: any) => {
+      useEditorStore.getState().updateSection(section.id, data)
+    },
+    [section.id]
+  )
 
   return (
     <div
@@ -84,7 +96,7 @@ function SectionBlock({
 
       {/* Section content */}
       <div className={`${!section.visible ? 'opacity-30 pointer-events-none' : ''}`}>
-        <Component data={section.data} />
+        <Component data={section.data} sectionId={section.id} onUpdate={handleUpdate} />
       </div>
     </div>
   )

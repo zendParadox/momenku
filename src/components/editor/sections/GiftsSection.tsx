@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import type { GiftsData } from '@/types/editor'
-
-export default function GiftsSection({ data }: { data: GiftsData }) {
+export default function GiftsSection({ data, sectionId, onUpdate }: { data: GiftsData; sectionId: string; onUpdate: (data: Partial<GiftsData>) => void }) {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
 
   const handleCopy = (number: string, index: number) => {

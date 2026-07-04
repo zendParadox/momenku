@@ -16,7 +16,8 @@ import FooterSection from '@/components/editor/sections/FooterSection'
 import CustomSection from '@/components/editor/sections/CustomSection'
 import { ArrowLeft } from 'lucide-react'
 
-const SECTION_COMPONENTS: Record<string, React.ComponentType<{ data: any }>> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const SECTION_COMPONENTS: Record<string, React.ComponentType<any>> = {
   hero: HeroSection,
   couple: CoupleSection,
   story: StorySection,

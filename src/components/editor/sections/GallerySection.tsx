@@ -1,8 +1,7 @@
 'use client'
 
 import type { GalleryData } from '@/types/editor'
-
-export default function GallerySection({ data }: { data: GalleryData }) {
+export default function GallerySection({ data, sectionId, onUpdate }: { data: GalleryData; sectionId: string; onUpdate: (data: Partial<GalleryData>) => void }) {
   const colClass =
     data.columns === 4
       ? 'grid-cols-4'

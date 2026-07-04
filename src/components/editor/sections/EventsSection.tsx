@@ -1,8 +1,23 @@
 'use client'
 
 import type { EventsData } from '@/types/editor'
+import InlineEditable from '../InlineEditable'
 
-export default function EventsSection({ data }: { data: EventsData }) {
+export default function EventsSection({
+  data,
+  sectionId,
+  onUpdate,
+}: {
+  data: EventsData
+  sectionId: string
+  onUpdate: (data: Partial<EventsData>) => void
+}) {
+  const updateItem = (idx: number, key: keyof EventsData['items'][0], value: string) => {
+    const items = [...data.items]
+    items[idx] = { ...items[idx], [key]: value }
+    onUpdate({ items } as Partial<EventsData>)
+  }
+
   return (
     <div
       className="w-full py-12 px-6"
@@ -25,7 +40,13 @@ export default function EventsSection({ data }: { data: EventsData }) {
           className="text-stone-800 text-3xl font-semibold"
           style={{ fontFamily: 'var(--theme-font-heading)' }}
         >
-          {data.title}
+          <InlineEditable
+            value={data.title}
+            onChange={(v) => onUpdate({ title: v })}
+            tag="h2"
+            className="text-stone-800 text-3xl font-semibold"
+            placeholder="Acara"
+          />
         </h2>
         <div
           className="w-12 h-px mx-auto mt-3"
@@ -51,7 +72,13 @@ export default function EventsSection({ data }: { data: EventsData }) {
                 className="text-white text-xl font-semibold"
                 style={{ fontFamily: 'var(--theme-font-heading)' }}
               >
-                {event.name}
+                <InlineEditable
+                  value={event.name}
+                  onChange={(v) => updateItem(index, 'name', v)}
+                  tag="h3"
+                  className="text-white text-xl font-semibold"
+                  placeholder="Nama Acara"
+                />
               </h3>
             </div>
 
@@ -83,13 +110,25 @@ export default function EventsSection({ data }: { data: EventsData }) {
                     className="text-stone-800 text-sm font-medium"
                     style={{ fontFamily: 'var(--theme-font-body)' }}
                   >
-                    {event.date || 'Tanggal acara'}
+                    <InlineEditable
+                      value={event.date}
+                      onChange={(v) => updateItem(index, 'date', v)}
+                      tag="p"
+                      className="text-stone-800 text-sm font-medium"
+                      placeholder="Tanggal acara"
+                    />
                   </p>
                   <p
                     className="text-stone-500 text-xs"
                     style={{ fontFamily: 'var(--theme-font-body)' }}
                   >
-                    {event.time}
+                    <InlineEditable
+                      value={event.time}
+                      onChange={(v) => updateItem(index, 'time', v)}
+                      tag="p"
+                      className="text-stone-500 text-xs"
+                      placeholder="Waktu"
+                    />
                   </p>
                 </div>
               </div>
@@ -126,13 +165,25 @@ export default function EventsSection({ data }: { data: EventsData }) {
                     className="text-stone-800 text-sm font-medium"
                     style={{ fontFamily: 'var(--theme-font-body)' }}
                   >
-                    {event.location}
+                    <InlineEditable
+                      value={event.location}
+                      onChange={(v) => updateItem(index, 'location', v)}
+                      tag="p"
+                      className="text-stone-800 text-sm font-medium"
+                      placeholder="Lokasi"
+                    />
                   </p>
                   <p
                     className="text-stone-500 text-xs"
                     style={{ fontFamily: 'var(--theme-font-body)' }}
                   >
-                    {event.address}
+                    <InlineEditable
+                      value={event.address}
+                      onChange={(v) => updateItem(index, 'address', v)}
+                      tag="p"
+                      className="text-stone-500 text-xs"
+                      placeholder="Alamat"
+                    />
                   </p>
                 </div>
               </div>

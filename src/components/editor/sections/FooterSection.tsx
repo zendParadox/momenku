@@ -1,8 +1,17 @@
 'use client'
 
 import type { FooterData } from '@/types/editor'
+import InlineEditable from '../InlineEditable'
 
-export default function FooterSection({ data }: { data: FooterData }) {
+export default function FooterSection({
+  data,
+  sectionId,
+  onUpdate,
+}: {
+  data: FooterData
+  sectionId: string
+  onUpdate: (data: Partial<FooterData>) => void
+}) {
   return (
     <div
       className="w-full py-16 px-6"
@@ -34,7 +43,14 @@ export default function FooterSection({ data }: { data: FooterData }) {
           className="text-stone-600 text-sm leading-relaxed italic"
           style={{ fontFamily: 'var(--theme-font-body)' }}
         >
-          &ldquo;{data.message}&rdquo;
+          &ldquo;<InlineEditable
+            value={data.message}
+            onChange={(v) => onUpdate({ message: v })}
+            tag="span"
+            className="text-stone-600 text-sm leading-relaxed italic"
+            placeholder="Pesan penutup..."
+            multiline
+          />&rdquo;
         </p>
       </div>
 
@@ -47,7 +63,13 @@ export default function FooterSection({ data }: { data: FooterData }) {
             color: 'var(--theme-primary, #059669)',
           }}
         >
-          {data.coupleNames}
+          <InlineEditable
+            value={data.coupleNames}
+            onChange={(v) => onUpdate({ coupleNames: v })}
+            tag="p"
+            className="text-3xl"
+            placeholder="Rina & Budi"
+          />
         </p>
       </div>
 

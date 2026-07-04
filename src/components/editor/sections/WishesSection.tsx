@@ -8,7 +8,7 @@ const SAMPLE_WISHES = [
   { name: 'Diana', message: 'Happy wedding! Can\'t wait to celebrate with you both!', time: '1 hari lalu' },
 ]
 
-export default function WishesSection({ data }: { data: WishesData }) {
+export default function WishesSection({ data, sectionId, onUpdate }: { data: WishesData; sectionId: string; onUpdate: (data: Partial<WishesData>) => void }) {
   return (
     <div className="w-full bg-gradient-to-b from-stone-50 to-white py-12 px-6">
       {/* Title */}

@@ -1,8 +1,23 @@
 'use client'
 
 import type { StoryData } from '@/types/editor'
+import InlineEditable from '../InlineEditable'
 
-export default function StorySection({ data }: { data: StoryData }) {
+export default function StorySection({
+  data,
+  sectionId,
+  onUpdate,
+}: {
+  data: StoryData
+  sectionId: string
+  onUpdate: (data: Partial<StoryData>) => void
+}) {
+  const updateItem = (idx: number, key: keyof StoryData['items'][0], value: string) => {
+    const items = [...data.items]
+    items[idx] = { ...items[idx], [key]: value }
+    onUpdate({ items } as Partial<StoryData>)
+  }
+
   return (
     <div className="w-full bg-white py-12 px-6">
       {/* Title */}
@@ -20,7 +35,13 @@ export default function StorySection({ data }: { data: StoryData }) {
           className="text-stone-800 text-3xl font-semibold"
           style={{ fontFamily: 'var(--theme-font-heading)' }}
         >
-          {data.title}
+          <InlineEditable
+            value={data.title}
+            onChange={(v) => onUpdate({ title: v })}
+            tag="h2"
+            className="text-stone-800 text-3xl font-semibold"
+            placeholder="Love Story"
+          />
         </h2>
         <div
           className="w-12 h-px mx-auto mt-3"
@@ -73,19 +94,38 @@ export default function StorySection({ data }: { data: StoryData }) {
                     fontFamily: 'var(--theme-font-body)',
                   }}
                 >
-                  {item.year}
+                  <InlineEditable
+                    value={item.year}
+                    onChange={(v) => updateItem(index, 'year', v)}
+                    tag="span"
+                    className="text-xs tracking-wider"
+                    placeholder="Tahun"
+                  />
                 </span>
                 <h3
                   className="text-stone-800 text-xl font-semibold mt-1"
                   style={{ fontFamily: 'var(--theme-font-heading)' }}
                 >
-                  {item.title}
+                  <InlineEditable
+                    value={item.title}
+                    onChange={(v) => updateItem(index, 'title', v)}
+                    tag="h3"
+                    className="text-stone-800 text-xl font-semibold mt-1"
+                    placeholder="Judul Cerita"
+                  />
                 </h3>
                 <p
                   className="text-stone-500 text-sm mt-1 leading-relaxed"
                   style={{ fontFamily: 'var(--theme-font-body)' }}
                 >
-                  {item.description}
+                  <InlineEditable
+                    value={item.description}
+                    onChange={(v) => updateItem(index, 'description', v)}
+                    tag="p"
+                    className="text-stone-500 text-sm mt-1 leading-relaxed"
+                    placeholder="Deskripsi cerita..."
+                    multiline
+                  />
                 </p>
                 {item.image && (
                   <div className="mt-3 rounded-lg overflow-hidden shadow-sm">

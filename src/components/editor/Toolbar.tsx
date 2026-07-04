@@ -12,6 +12,8 @@ import {
   Settings,
   Loader2,
 } from 'lucide-react'
+import ThemePicker from './ThemePicker'
+import FontPicker from './FontPicker'
 
 export default function Toolbar() {
   const {
@@ -106,6 +108,14 @@ export default function Toolbar() {
       >
         <Redo2 className="w-4 h-4" />
       </button>
+
+      <div className="w-px h-6 bg-stone-700" />
+
+      {/* Theme Color Picker */}
+      <ThemePicker />
+
+      {/* Font Picker */}
+      <FontPicker />
 
       <div className="w-px h-6 bg-stone-700" />
 

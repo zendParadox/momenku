@@ -1,8 +1,17 @@
 'use client'
 
 import type { CoupleData } from '@/types/editor'
+import InlineEditable from '../InlineEditable'
 
-export default function CoupleSection({ data }: { data: CoupleData }) {
+export default function CoupleSection({
+  data,
+  sectionId,
+  onUpdate,
+}: {
+  data: CoupleData
+  sectionId: string
+  onUpdate: (data: Partial<CoupleData>) => void
+}) {
   return (
     <div
       className="w-full py-12 px-6"
@@ -66,13 +75,25 @@ export default function CoupleSection({ data }: { data: CoupleData }) {
               color: 'color-mix(in srgb, var(--theme-primary, #059669) 80%, black)',
             }}
           >
-            {data.groomName}
+            <InlineEditable
+              value={data.groomName}
+              onChange={(v) => onUpdate({ groomName: v })}
+              tag="h3"
+              className="text-3xl font-semibold"
+              placeholder="Nama Mempelai Pria"
+            />
           </h3>
           <p
             className="text-stone-500 text-sm mt-1"
             style={{ fontFamily: 'var(--theme-font-body)' }}
           >
-            {data.groomParents}
+            <InlineEditable
+              value={data.groomParents}
+              onChange={(v) => onUpdate({ groomParents: v })}
+              tag="p"
+              className="text-stone-500 text-sm mt-1"
+              placeholder="Orang Tua Pria"
+            />
           </p>
         </div>
 
@@ -101,13 +122,25 @@ export default function CoupleSection({ data }: { data: CoupleData }) {
               color: 'color-mix(in srgb, var(--theme-primary, #059669) 80%, black)',
             }}
           >
-            {data.brideName}
+            <InlineEditable
+              value={data.brideName}
+              onChange={(v) => onUpdate({ brideName: v })}
+              tag="h3"
+              className="text-3xl font-semibold"
+              placeholder="Nama Mempelai Wanita"
+            />
           </h3>
           <p
             className="text-stone-500 text-sm mt-1"
             style={{ fontFamily: 'var(--theme-font-body)' }}
           >
-            {data.brideParents}
+            <InlineEditable
+              value={data.brideParents}
+              onChange={(v) => onUpdate({ brideParents: v })}
+              tag="p"
+              className="text-stone-500 text-sm mt-1"
+              placeholder="Orang Tua Wanita"
+            />
           </p>
         </div>
       </div>
