@@ -12,7 +12,13 @@ export default function HeroSection({ data }: { data: HeroData }) {
           style={{ backgroundImage: `url(${data.backgroundImage})` }}
         />
       ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-600" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(135deg, var(--theme-primary, #059669) 0%, color-mix(in srgb, var(--theme-primary, #059669) 85%, black) 50%, color-mix(in srgb, var(--theme-primary, #059669) 70%, black) 100%)',
+          }}
+        />
       )}
 
       {/* Overlay */}
@@ -22,22 +28,41 @@ export default function HeroSection({ data }: { data: HeroData }) {
       />
 
       {/* Decorative elements */}
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-amber-300/60 to-transparent" />
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-amber-300/60 to-transparent" />
+      <div
+        className="absolute top-8 left-1/2 -translate-x-1/2 w-32 h-px"
+        style={{
+          background:
+            'linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent)',
+        }}
+      />
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 w-32 h-px"
+        style={{
+          background:
+            'linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent)',
+        }}
+      />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 py-12">
-        <p className="text-amber-200/80 text-sm tracking-[0.3em] uppercase font-[family-name:var(--font-jakarta)] mb-4">
+        <p
+          className="text-sm tracking-[0.3em] uppercase mb-4"
+          style={{
+            color: 'rgba(255,255,255,0.7)',
+            fontFamily: 'var(--theme-font-body)',
+          }}
+        >
           Wedding Invitation
         </p>
 
         {/* Decorative flourish */}
         <svg
-          className="mx-auto mb-6 text-amber-300/50"
+          className="mx-auto mb-6"
           width="80"
           height="24"
           viewBox="0 0 80 24"
           fill="none"
+          style={{ color: 'rgba(255,255,255,0.4)' }}
         >
           <path
             d="M0 12 C20 12 20 2 40 2 C60 2 60 12 80 12"
@@ -54,23 +79,36 @@ export default function HeroSection({ data }: { data: HeroData }) {
           <circle cx="40" cy="12" r="2" fill="currentColor" />
         </svg>
 
-        <h1 className="font-[family-name:var(--font-cormorant)] text-white text-4xl md:text-5xl font-light leading-tight mb-3">
+        <h1
+          className="text-white text-4xl md:text-5xl font-light leading-tight mb-3"
+          style={{ fontFamily: 'var(--theme-font-heading)' }}
+        >
           {data.title}
         </h1>
 
-        <div className="w-12 h-px bg-amber-300/40 mx-auto my-4" />
+        <div
+          className="w-12 h-px mx-auto my-4"
+          style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}
+        />
 
-        <h2 className="font-[family-name:var(--font-script)] text-amber-200 text-3xl md:text-4xl">
+        <h2
+          className="text-3xl md:text-4xl"
+          style={{
+            fontFamily: 'var(--theme-font-heading)',
+            color: 'rgba(255,255,255,0.8)',
+          }}
+        >
           {data.subtitle}
         </h2>
 
         <div className="mt-8">
           <svg
-            className="mx-auto text-amber-300/40"
+            className="mx-auto"
             width="24"
             height="40"
             viewBox="0 0 24 40"
             fill="none"
+            style={{ color: 'rgba(255,255,255,0.35)' }}
           >
             <rect
               x="8"

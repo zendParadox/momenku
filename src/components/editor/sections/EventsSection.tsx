@@ -4,16 +4,33 @@ import type { EventsData } from '@/types/editor'
 
 export default function EventsSection({ data }: { data: EventsData }) {
   return (
-    <div className="w-full bg-gradient-to-b from-white to-emerald-50 py-12 px-6">
+    <div
+      className="w-full py-12 px-6"
+      style={{
+        background: 'linear-gradient(to bottom, white, color-mix(in srgb, var(--theme-primary, #059669) 5%, white))',
+      }}
+    >
       {/* Title */}
       <div className="text-center mb-8">
-        <p className="text-emerald-600 text-xs tracking-[0.2em] uppercase font-[family-name:var(--font-jakarta)] mb-2">
+        <p
+          className="text-xs tracking-[0.2em] uppercase mb-2"
+          style={{
+            color: 'var(--theme-primary, #059669)',
+            fontFamily: 'var(--theme-font-body)',
+          }}
+        >
           Save the Date
         </p>
-        <h2 className="font-[family-name:var(--font-cormorant)] text-stone-800 text-3xl font-semibold">
+        <h2
+          className="text-stone-800 text-3xl font-semibold"
+          style={{ fontFamily: 'var(--theme-font-heading)' }}
+        >
           {data.title}
         </h2>
-        <div className="w-12 h-px bg-emerald-300 mx-auto mt-3" />
+        <div
+          className="w-12 h-px mx-auto mt-3"
+          style={{ backgroundColor: 'var(--theme-primary, #059669)', opacity: 0.5 }}
+        />
       </div>
 
       {/* Event cards */}
@@ -24,8 +41,16 @@ export default function EventsSection({ data }: { data: EventsData }) {
             className="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden"
           >
             {/* Card header */}
-            <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 px-6 py-4">
-              <h3 className="font-[family-name:var(--font-cormorant)] text-white text-xl font-semibold">
+            <div
+              className="px-6 py-4"
+              style={{
+                background: `linear-gradient(to right, var(--theme-primary, #059669), color-mix(in srgb, var(--theme-primary, #059669) 90%, white))`,
+              }}
+            >
+              <h3
+                className="text-white text-xl font-semibold"
+                style={{ fontFamily: 'var(--theme-font-heading)' }}
+              >
                 {event.name}
               </h3>
             </div>
@@ -34,12 +59,16 @@ export default function EventsSection({ data }: { data: EventsData }) {
             <div className="px-6 py-5 space-y-3">
               {/* Date & Time */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ backgroundColor: 'color-mix(in srgb, var(--theme-primary, #059669) 10%, white)' }}
+                >
                   <svg
-                    className="w-5 h-5 text-emerald-600"
+                    className="w-5 h-5"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
+                    style={{ color: 'var(--theme-primary, #059669)' }}
                   >
                     <path
                       strokeLinecap="round"
@@ -50,10 +79,16 @@ export default function EventsSection({ data }: { data: EventsData }) {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-stone-800 text-sm font-medium font-[family-name:var(--font-jakarta)]">
+                  <p
+                    className="text-stone-800 text-sm font-medium"
+                    style={{ fontFamily: 'var(--theme-font-body)' }}
+                  >
                     {event.date || 'Tanggal acara'}
                   </p>
-                  <p className="text-stone-500 text-xs font-[family-name:var(--font-jakarta)]">
+                  <p
+                    className="text-stone-500 text-xs"
+                    style={{ fontFamily: 'var(--theme-font-body)' }}
+                  >
                     {event.time}
                   </p>
                 </div>
@@ -61,12 +96,16 @@ export default function EventsSection({ data }: { data: EventsData }) {
 
               {/* Location */}
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ backgroundColor: 'color-mix(in srgb, var(--theme-primary, #059669) 10%, white)' }}
+                >
                   <svg
-                    className="w-5 h-5 text-emerald-600"
+                    className="w-5 h-5"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
+                    style={{ color: 'var(--theme-primary, #059669)' }}
                   >
                     <path
                       strokeLinecap="round"
@@ -83,10 +122,16 @@ export default function EventsSection({ data }: { data: EventsData }) {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-stone-800 text-sm font-medium font-[family-name:var(--font-jakarta)]">
+                  <p
+                    className="text-stone-800 text-sm font-medium"
+                    style={{ fontFamily: 'var(--theme-font-body)' }}
+                  >
                     {event.location}
                   </p>
-                  <p className="text-stone-500 text-xs font-[family-name:var(--font-jakarta)]">
+                  <p
+                    className="text-stone-500 text-xs"
+                    style={{ fontFamily: 'var(--theme-font-body)' }}
+                  >
                     {event.address}
                   </p>
                 </div>
@@ -95,7 +140,15 @@ export default function EventsSection({ data }: { data: EventsData }) {
 
             {/* Map link */}
             <div className="px-6 pb-5">
-              <button className="w-full py-2.5 rounded-xl border border-emerald-200 text-emerald-600 text-sm font-medium font-[family-name:var(--font-jakarta)] hover:bg-emerald-50 transition-colors">
+              <button
+                className="w-full py-2.5 rounded-xl border text-sm font-medium transition-colors"
+                style={{
+                  borderColor: 'var(--theme-primary, #059669)',
+                  opacity: 0.6,
+                  color: 'var(--theme-primary, #059669)',
+                  fontFamily: 'var(--theme-font-body)',
+                }}
+              >
                 Lihat Peta
               </button>
             </div>

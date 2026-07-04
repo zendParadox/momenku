@@ -4,15 +4,21 @@ import type { FooterData } from '@/types/editor'
 
 export default function FooterSection({ data }: { data: FooterData }) {
   return (
-    <div className="w-full bg-gradient-to-b from-emerald-50 to-emerald-100 py-16 px-6">
+    <div
+      className="w-full py-16 px-6"
+      style={{
+        background: 'linear-gradient(to bottom, color-mix(in srgb, var(--theme-primary, #059669) 5%, white), color-mix(in srgb, var(--theme-primary, #059669) 10%, white))',
+      }}
+    >
       {/* Decorative top */}
       <div className="text-center mb-8">
         <svg
-          className="mx-auto text-emerald-300"
+          className="mx-auto"
           width="60"
           height="40"
           viewBox="0 0 60 40"
           fill="none"
+          style={{ color: 'var(--theme-primary, #059669)', opacity: 0.4 }}
         >
           <path
             d="M30 36 C30 36 4 22 4 12 C4 4 10 2 16 6 C22 10 27 18 30 22 C33 18 38 10 44 6 C50 2 56 4 56 12 C56 22 30 36 30 36Z"
@@ -24,14 +30,23 @@ export default function FooterSection({ data }: { data: FooterData }) {
 
       {/* Message */}
       <div className="text-center max-w-sm mx-auto">
-        <p className="text-stone-600 text-sm font-[family-name:var(--font-jakarta)] leading-relaxed italic">
+        <p
+          className="text-stone-600 text-sm leading-relaxed italic"
+          style={{ fontFamily: 'var(--theme-font-body)' }}
+        >
           &ldquo;{data.message}&rdquo;
         </p>
       </div>
 
       {/* Couple names */}
       <div className="text-center mt-8">
-        <p className="font-[family-name:var(--font-script)] text-emerald-700 text-3xl">
+        <p
+          className="text-3xl"
+          style={{
+            fontFamily: 'var(--theme-font-heading)',
+            color: 'var(--theme-primary, #059669)',
+          }}
+        >
           {data.coupleNames}
         </p>
       </div>
@@ -39,11 +54,14 @@ export default function FooterSection({ data }: { data: FooterData }) {
       {/* Decorative bottom */}
       <div className="text-center mt-8">
         <div className="flex items-center justify-center gap-3">
-          <div className="w-12 h-px bg-emerald-300/50" />
-          <span className="text-emerald-400 text-lg">♥</span>
-          <div className="w-12 h-px bg-emerald-300/50" />
+          <div className="w-12 h-px" style={{ backgroundColor: 'var(--theme-primary, #059669)', opacity: 0.3 }} />
+          <span className="text-lg" style={{ color: 'var(--theme-primary, #059669)', opacity: 0.6 }}>♥</span>
+          <div className="w-12 h-px" style={{ backgroundColor: 'var(--theme-primary, #059669)', opacity: 0.3 }} />
         </div>
-        <p className="text-stone-400 text-xs mt-4 font-[family-name:var(--font-jakarta)]">
+        <p
+          className="text-stone-400 text-xs mt-4"
+          style={{ fontFamily: 'var(--theme-font-body)' }}
+        >
           Made with MomenKu
         </p>
       </div>

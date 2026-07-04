@@ -14,13 +14,25 @@ export default function GallerySection({ data }: { data: GalleryData }) {
     <div className="w-full bg-stone-50 py-12 px-6">
       {/* Title */}
       <div className="text-center mb-8">
-        <p className="text-emerald-600 text-xs tracking-[0.2em] uppercase font-[family-name:var(--font-jakarta)] mb-2">
+        <p
+          className="text-xs tracking-[0.2em] uppercase mb-2"
+          style={{
+            color: 'var(--theme-primary, #059669)',
+            fontFamily: 'var(--theme-font-body)',
+          }}
+        >
           Moments
         </p>
-        <h2 className="font-[family-name:var(--font-cormorant)] text-stone-800 text-3xl font-semibold">
+        <h2
+          className="text-stone-800 text-3xl font-semibold"
+          style={{ fontFamily: 'var(--theme-font-heading)' }}
+        >
           {data.title}
         </h2>
-        <div className="w-12 h-px bg-emerald-300 mx-auto mt-3" />
+        <div
+          className="w-12 h-px mx-auto mt-3"
+          style={{ backgroundColor: 'var(--theme-primary, #059669)', opacity: 0.5 }}
+        />
       </div>
 
       {/* Image grid */}

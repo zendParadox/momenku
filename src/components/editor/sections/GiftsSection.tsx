@@ -16,14 +16,29 @@ export default function GiftsSection({ data }: { data: GiftsData }) {
     <div className="w-full bg-white py-12 px-6">
       {/* Title */}
       <div className="text-center mb-8">
-        <p className="text-emerald-600 text-xs tracking-[0.2em] uppercase font-[family-name:var(--font-jakarta)] mb-2">
+        <p
+          className="text-xs tracking-[0.2em] uppercase mb-2"
+          style={{
+            color: 'var(--theme-primary, #059669)',
+            fontFamily: 'var(--theme-font-body)',
+          }}
+        >
           Wedding Gift
         </p>
-        <h2 className="font-[family-name:var(--font-cormorant)] text-stone-800 text-3xl font-semibold">
+        <h2
+          className="text-stone-800 text-3xl font-semibold"
+          style={{ fontFamily: 'var(--theme-font-heading)' }}
+        >
           {data.title}
         </h2>
-        <div className="w-12 h-px bg-emerald-300 mx-auto mt-3" />
-        <p className="text-stone-500 text-sm mt-4 font-[family-name:var(--font-jakarta)] max-w-sm mx-auto leading-relaxed">
+        <div
+          className="w-12 h-px mx-auto mt-3"
+          style={{ backgroundColor: 'var(--theme-primary, #059669)', opacity: 0.5 }}
+        />
+        <p
+          className="text-stone-500 text-sm mt-4 max-w-sm mx-auto leading-relaxed"
+          style={{ fontFamily: 'var(--theme-font-body)' }}
+        >
           Tanpa mengurangi rasa hormat, bagi Bapak/Ibu/Saudara/i yang ingin memberikan tanda kasih
           dapat melalui:
         </p>
@@ -34,10 +49,17 @@ export default function GiftsSection({ data }: { data: GiftsData }) {
         {data.items.map((item, index) => (
           <div
             key={index}
-            className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-5 border border-emerald-100"
+            className="rounded-2xl p-5 border"
+            style={{
+              background: `linear-gradient(to bottom right, color-mix(in srgb, var(--theme-primary, #059669) 5%, white), color-mix(in srgb, var(--theme-primary, #059669) 8%, white))`,
+              borderColor: 'color-mix(in srgb, var(--theme-primary, #059669) 20%, white)',
+            }}
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ backgroundColor: 'var(--theme-primary, #059669)' }}
+              >
                 <svg
                   className="w-5 h-5 text-white"
                   fill="none"
@@ -53,22 +75,35 @@ export default function GiftsSection({ data }: { data: GiftsData }) {
                 </svg>
               </div>
               <div>
-                <p className="text-stone-800 text-sm font-semibold font-[family-name:var(--font-jakarta)]">
+                <p
+                  className="text-stone-800 text-sm font-semibold"
+                  style={{ fontFamily: 'var(--theme-font-body)' }}
+                >
                   {item.name}
                 </p>
-                <p className="text-stone-500 text-xs font-[family-name:var(--font-jakarta)]">
+                <p
+                  className="text-stone-500 text-xs"
+                  style={{ fontFamily: 'var(--theme-font-body)' }}
+                >
                   a.n. {item.nameAccount}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center justify-between bg-white rounded-xl px-4 py-3">
-              <span className="text-stone-800 text-sm font-mono tracking-wider font-[family-name:var(--font-jakarta)]">
+              <span
+                className="text-stone-800 text-sm font-mono tracking-wider"
+                style={{ fontFamily: 'var(--theme-font-body)' }}
+              >
                 {item.number}
               </span>
               <button
                 onClick={() => handleCopy(item.number, index)}
-                className="text-emerald-600 text-xs font-medium font-[family-name:var(--font-jakarta)] hover:text-emerald-700 transition-colors"
+                className="text-xs font-medium transition-colors"
+                style={{
+                  color: 'var(--theme-primary, #059669)',
+                  fontFamily: 'var(--theme-font-body)',
+                }}
               >
                 {copiedIndex === index ? '✓ Tersalin' : 'Salin'}
               </button>

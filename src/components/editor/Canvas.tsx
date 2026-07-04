@@ -91,7 +91,7 @@ function SectionBlock({
 }
 
 export default function Canvas() {
-  const { sections, selectedSectionId, selectSection, addSection, reorderSections } =
+  const { sections, selectedSectionId, selectSection, addSection, reorderSections, themeOverrides } =
     useEditorStore()
   const canvasRef = useRef<HTMLDivElement>(null)
 
@@ -158,7 +158,14 @@ export default function Canvas() {
         }}
       >
         {/* White canvas card */}
-        <div className="bg-white min-h-[600px]">
+        <div
+          className="bg-white min-h-[600px]"
+          style={{
+            '--theme-primary': (themeOverrides.primaryColor as string) || '#059669',
+            '--theme-font-heading': (themeOverrides.fontHeading as string) || 'Cormorant Garamond',
+            '--theme-font-body': (themeOverrides.fontBody as string) || 'Plus Jakarta Sans',
+          } as React.CSSProperties}
+        >
           {sections.length === 0 ? (
             <div
               className="flex flex-col items-center justify-center min-h-[600px] text-center p-8"

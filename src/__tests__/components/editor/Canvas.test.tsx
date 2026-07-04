@@ -52,6 +52,7 @@ const mockStore = {
   selectSection: vi.fn(),
   addSection: vi.fn(),
   reorderSections: vi.fn(),
+  themeOverrides: {},
 }
 
 describe('Canvas Component', () => {
