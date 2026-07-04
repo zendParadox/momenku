@@ -58,6 +58,6 @@ export const config = {
     '/dashboard/:path*',
     '/login',
     '/register',
-    '/auth/:path*',
+    // NOTE: /auth/callback is NOT here — it handles its own cookies
   ],
 }
