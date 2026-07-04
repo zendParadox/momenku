@@ -13,12 +13,14 @@ import {
   Menu,
   X,
   Plus,
+  Users,
 } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 
 const sidebarLinks = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { label: 'Template', href: '/dashboard/templates', icon: FileText },
+  { label: 'Statistik RSVP', href: '/dashboard/rsvp', icon: Users },
   { label: 'Pengaturan', href: '/dashboard/settings', icon: Settings },
 ]
 
@@ -46,7 +48,7 @@ export default function DashboardShell({
   const userName = user.user_metadata?.full_name || user.email || 'User'
   const initials = userName.charAt(0).toUpperCase()
 
-  function NavLink({ link }: { link: typeof sidebarLinks[0] }) {
+  function NavLink({ link }: { link: (typeof sidebarLinks)[0] }) {
     const Icon = link.icon
     const isActive = pathname === link.href
     return (
