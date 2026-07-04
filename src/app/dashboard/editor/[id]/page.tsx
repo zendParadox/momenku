@@ -37,9 +37,23 @@ export default function EditorPage() {
 
       // "new" means create a new invitation, then redirect to its editor
       if (id === 'new') {
-        const { data: newData } = await supabase
+        // Get current user
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          window.location.replace('/login')
+          return
+        }
+
+        // Ensure profile exists (for users registered before the trigger)
+        await supabase
+          .from('profiles')
+          .upsert({ id: user.id, full_name: user.user_metadata?.full_name || '' })
+          .select()
+
+        const { data: newData, error: insertErr } = await supabase
           .from('invitations')
           .insert({
+            user_id: user.id,
             title: 'Undangan Baru',
             sections: [],
             status: 'draft',
@@ -52,6 +66,7 @@ export default function EditorPage() {
           window.location.replace(`/dashboard/editor/${newData.id}`)
           return
         }
+        console.error('Failed to create invitation:', insertErr)
         setLoading(false)
         return
       }
