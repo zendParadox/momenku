@@ -25,6 +25,7 @@ export default function LoginPage() {
     }
 
     setLoading(true)
+    toast.info({ title: 'Sedang masuk...', description: 'Memverifikasi akun Anda' })
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -46,6 +47,7 @@ export default function LoginPage() {
 
   async function handleGoogleLogin() {
     setGoogleLoading(true)
+    toast.info({ title: 'Mengarahkan ke Google...', description: 'Silakan pilih akun Google Anda' })
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

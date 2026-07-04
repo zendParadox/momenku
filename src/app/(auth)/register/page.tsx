@@ -42,6 +42,7 @@ export default function RegisterPage() {
     }
 
     setLoading(true)
+    toast.info({ title: 'Sedang membuat akun...', description: 'Tunggu sebentar' })
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -73,6 +74,7 @@ export default function RegisterPage() {
 
   async function handleGoogleRegister() {
     setGoogleLoading(true)
+    toast.info({ title: 'Mengarahkan ke Google...', description: 'Silakan pilih akun Google Anda' })
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

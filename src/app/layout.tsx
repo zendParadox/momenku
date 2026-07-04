@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Cormorant_Garamond, Great_Vibes } from "next/font/google";
+import Providers from "@/components/Providers";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -39,7 +40,9 @@ export default function RootLayout({
       className={`${jakarta.variable} ${cormorant.variable} ${greatVibes.variable}`}
     >
       <body className="font-[family-name:var(--font-jakarta)] antialiased">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
