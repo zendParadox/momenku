@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useEditorStore } from '@/lib/editor-store'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
@@ -10,11 +11,13 @@ import {
   Save,
   Eye,
   Send,
+  Share2,
   Settings,
   Loader2,
 } from 'lucide-react'
 import ThemePicker from './ThemePicker'
 import FontPicker from './FontPicker'
+import ShareDialog from './ShareDialog'
 import { toast } from 'gooey-toast'
 
 export default function Toolbar() {
@@ -33,6 +36,8 @@ export default function Toolbar() {
     setPublished,
     invitationId,
   } = useEditorStore()
+
+  const [shareOpen, setShareOpen] = useState(false)
 
   const handleSave = async () => {
     if (!invitationId || isSaving) return
@@ -86,6 +91,7 @@ export default function Toolbar() {
       } else {
         setPublished(true)
         toast.success({ title: 'Berhasil dipublikasi!', description: 'Undangan sudah online.' })
+        setShareOpen(true)
       }
     } catch (err) {
       toast.error({ title: 'Gagal mempublikasi', description: String(err) })
@@ -94,6 +100,13 @@ export default function Toolbar() {
 
   return (
     <div className="h-14 bg-stone-900 flex items-center px-4 gap-3 flex-shrink-0">
+      {/* Share Dialog */}
+      <ShareDialog
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        invitationId={invitationId || ''}
+      />
+
       {/* Back + Logo */}
       <Link
         href="/dashboard"
@@ -174,6 +187,15 @@ export default function Toolbar() {
         <Eye className="w-4 h-4" />
         <span className="hidden sm:inline">Preview</span>
       </Link>
+
+      {/* Share */}
+      <button
+        onClick={() => setShareOpen(true)}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-[family-name:var(--font-jakarta)] text-stone-300 hover:text-white hover:bg-stone-800 transition-colors"
+      >
+        <Share2 className="w-4 h-4" />
+        <span className="hidden sm:inline">Bagikan</span>
+      </button>
 
       {/* Publish */}
       <button
