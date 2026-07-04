@@ -31,25 +31,88 @@ export default function DashboardPage() {
 
   const [invitations, setInvitations] = useState<Invitation[]>([])
   const [loading, setLoading] = useState(true)
+  const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
-    async function fetchInvitations() {
+    async function ensureProfileAndFetch() {
       setLoading(true)
+
+      // Get current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      if (userError || !user) {
+        toast.error({ title: 'Sesi habis', description: 'Silakan login kembali' })
+        router.push('/login')
+        return
+      }
+
+      // Check if profile exists, create if not
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .single()
+
+      if (!profile) {
+        // Profile doesn't exist — create it
+        const { error: insertError } = await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
+            full_name: user.user_metadata?.full_name || '',
+            avatar_url: user.user_metadata?.avatar_url || '',
+          })
+
+        if (insertError) {
+          console.error('Failed to create profile:', insertError)
+          // If RLS blocks insert, the profile might be created by trigger
+          // Just wait and retry
+          if (retryCount < 2) {
+            setRetryCount((c) => c + 1)
+            setLoading(false)
+            return
+          }
+        }
+      }
+
+      // Now fetch invitations
       const { data, error } = await supabase
         .from('invitations')
         .select('*')
         .order('created_at', { ascending: false })
 
       if (error) {
-        toast.error({ title: 'Gagal memuat undangan', description: error.message })
+        if (error.code === '42501' || error.message.includes('permission')) {
+          // RLS error — profile might still be missing
+          toast.error({
+            title: 'Gagal memuat undangan',
+            description: 'Mencoba memperbaiki akses...',
+          })
+          // Try to create profile again
+          await supabase
+            .from('profiles')
+            .insert({
+              id: user.id,
+              full_name: user.user_metadata?.full_name || '',
+              avatar_url: user.user_metadata?.avatar_url || '',
+            })
+            .select()
+          // Retry fetch
+          const { data: retryData } = await supabase
+            .from('invitations')
+            .select('*')
+            .order('created_at', { ascending: false })
+          setInvitations(retryData || [])
+        } else {
+          toast.error({ title: 'Gagal memuat undangan', description: error.message })
+        }
       } else {
         setInvitations(data || [])
       }
       setLoading(false)
     }
 
-    fetchInvitations()
-  }, [supabase])
+    ensureProfileAndFetch()
+  }, [supabase, router, retryCount])
 
   const totalViews = invitations.reduce((sum, inv) => sum + (inv.view_count || 0), 0)
   const totalRsvps = invitations.reduce((sum, inv) => sum + (inv.rsvp_count || 0), 0)
