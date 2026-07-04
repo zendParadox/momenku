@@ -41,8 +41,7 @@ export default function LoginPage() {
     }
 
     toast.success({ title: 'Berhasil masuk!' })
-    router.push('/dashboard')
-    router.refresh()
+    window.location.href = '/dashboard'
   }
 
   async function handleGoogleLogin() {

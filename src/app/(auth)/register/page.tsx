@@ -68,8 +68,7 @@ export default function RegisterPage() {
     })
 
     // If email confirmation is disabled, user is signed in immediately
-    router.push('/dashboard')
-    router.refresh()
+    window.location.href = '/dashboard'
   }
 
   async function handleGoogleRegister() {

@@ -41,7 +41,7 @@ export default function DashboardPage() {
       const { data: { user }, error: userError } = await supabase.auth.getUser()
       if (userError || !user) {
         toast.error({ title: 'Sesi habis', description: 'Silakan login kembali' })
-        router.push('/login')
+        window.location.href = '/login'
         return
       }
 

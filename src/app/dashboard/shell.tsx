@@ -40,7 +40,7 @@ export default function DashboardShell({
       toast.error({ title: 'Gagal logout', description: error.message })
       return
     }
-    router.push('/login')
+    window.location.href = '/login'
   }
 
   const userName = user.user_metadata?.full_name || user.email || 'User'
