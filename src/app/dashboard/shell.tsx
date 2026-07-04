@@ -12,6 +12,7 @@ import {
   LogOut,
   Menu,
   X,
+  Plus,
 } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 
@@ -78,11 +79,20 @@ export default function DashboardShell({
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 space-y-1 px-3 py-4">
-          {sidebarLinks.map((link) => (
-            <NavLink key={link.href} link={link} />
-          ))}
-        </nav>
+        <div className="flex-1 px-3 py-4">
+          <Link
+            href="/dashboard/editor/new"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 transition-all hover:bg-emerald-700 hover:shadow-xl"
+          >
+            <Plus className="h-4 w-4" />
+            Buat Undangan
+          </Link>
+          <nav className="mt-4 space-y-1">
+            {sidebarLinks.map((link) => (
+              <NavLink key={link.href} link={link} />
+            ))}
+          </nav>
+        </div>
 
         {/* Logout */}
         <div className="border-t border-stone-200 p-3">
@@ -124,11 +134,21 @@ export default function DashboardShell({
           </button>
         </div>
 
-        <nav className="flex-1 space-y-1 px-3 py-4">
-          {sidebarLinks.map((link) => (
-            <NavLink key={link.href} link={link} />
-          ))}
-        </nav>
+        <div className="flex-1 px-3 py-4">
+          <Link
+            href="/dashboard/editor/new"
+            onClick={() => setMobileOpen(false)}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 transition-all hover:bg-emerald-700 hover:shadow-xl"
+          >
+            <Plus className="h-4 w-4" />
+            Buat Undangan
+          </Link>
+          <nav className="mt-4 space-y-1">
+            {sidebarLinks.map((link) => (
+              <NavLink key={link.href} link={link} />
+            ))}
+          </nav>
+        </div>
 
         <div className="border-t border-stone-200 p-3">
           <button
