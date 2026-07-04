@@ -34,6 +34,28 @@ export default function EditorPage() {
 
     const loadInvitation = async () => {
       const supabase = createClient()
+
+      // "new" means create a new invitation, then redirect to its editor
+      if (id === 'new') {
+        const { data: newData } = await supabase
+          .from('invitations')
+          .insert({
+            title: 'Undangan Baru',
+            sections: [],
+            status: 'draft',
+          })
+          .select()
+          .single()
+
+        if (newData) {
+          // Replace URL so undo/redo don't re-create
+          window.location.replace(`/dashboard/editor/${newData.id}`)
+          return
+        }
+        setLoading(false)
+        return
+      }
+
       const { data } = await supabase
         .from('invitations')
         .select('*')
@@ -42,27 +64,13 @@ export default function EditorPage() {
 
       if (data) {
         setInvitationId(data.id)
-        setInvitationTitle(data.title || 'Undangan Pernikahan')
+        setInvitationTitle(data.title || 'Undangan Baru')
         loadSections(data.sections || [])
-        setPublished(data.published || false)
+        setPublished(data.status === 'published')
       } else {
-        // Create new invitation
-        const { data: newData } = await supabase
-          .from('invitations')
-          .insert({
-            id,
-            title: 'Undangan Pernikahan',
-            sections: [],
-            published: false,
-          })
-          .select()
-          .single()
-
-        if (newData) {
-          setInvitationId(newData.id)
-          setInvitationTitle(newData.title)
-          loadSections([])
-        }
+        // ID doesn't exist — redirect back to dashboard
+        window.location.replace('/dashboard')
+        return
       }
       setLoading(false)
     }

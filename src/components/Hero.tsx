@@ -94,7 +94,7 @@ export default function Hero() {
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
           <a
-            href="#"
+            href="/register"
             className={cn(
               'inline-flex items-center justify-center rounded-xl px-8 py-3.5',
               'bg-emerald-600 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25',
@@ -106,7 +106,7 @@ export default function Hero() {
           </a>
 
           <a
-            href="#"
+            href="#templates"
             className={cn(
               'inline-flex items-center justify-center rounded-xl border border-stone-300 px-8 py-3.5',
               'bg-transparent text-sm font-semibold text-stone-700',
