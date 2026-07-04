@@ -6,9 +6,14 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code')
   const next = searchParams.get('next') ?? '/dashboard'
 
-  if (code) {
-    let supabaseResponse = NextResponse.next({ request })
+  if (!code) {
+    return NextResponse.redirect(`${origin}/login?error=missing_code`)
+  }
 
+  // We need a mutable reference for the response that carries cookies
+  let supabaseResponse = NextResponse.next({ request })
+
+  try {
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -18,10 +23,13 @@ export async function GET(request: NextRequest) {
             return request.cookies.getAll()
           },
           setAll(cookiesToSet) {
+            // Update request cookies
             cookiesToSet.forEach(({ name, value }) =>
               request.cookies.set(name, value)
             )
+            // Create a new "next" response that carries the updated cookies
             supabaseResponse = NextResponse.next({ request })
+            // Set cookies on that response
             cookiesToSet.forEach(({ name, value, options }) =>
               supabaseResponse.cookies.set(name, value, options)
             )
@@ -32,27 +40,38 @@ export async function GET(request: NextRequest) {
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error) {
-      // IMPORTANT: Return supabaseResponse (which has the cookies)
-      // with a redirect header — NOT a new NextResponse.redirect()
-      const forwardedHost = request.headers.get('x-forwarded-host')
-      const isLocalEnv = process.env.NODE_ENV === 'development'
-
-      let redirectUrl: string
-      if (isLocalEnv) {
-        redirectUrl = `${origin}${next}`
-      } else if (forwardedHost) {
-        redirectUrl = `https://${forwardedHost}${next}`
-      } else {
-        redirectUrl = `${origin}${next}`
-      }
-
-      // Set redirect location on the response that HAS the cookies
-      supabaseResponse.headers.set('Location', redirectUrl)
-      return supabaseResponse
+    if (error) {
+      console.error('OAuth exchange error:', error.message)
+      return NextResponse.redirect(
+        `${origin}/login?error=${encodeURIComponent(error.message)}`
+      )
     }
-  }
 
-  // Return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/login?error=auth_callback_error`)
+    // Build redirect URL
+    const forwardedHost = request.headers.get('x-forwarded-host')
+    const isLocalEnv = process.env.NODE_ENV === 'development'
+
+    let redirectUrl: string
+    if (isLocalEnv) {
+      redirectUrl = `${origin}${next}`
+    } else if (forwardedHost) {
+      redirectUrl = `https://${forwardedHost}${next}`
+    } else {
+      redirectUrl = `${origin}${next}`
+    }
+
+    // Copy cookies from supabaseResponse to a redirect response
+    const redirectResponse = NextResponse.redirect(redirectUrl)
+    supabaseResponse.cookies.getAll().forEach(({ name, value, ...options }) => {
+      redirectResponse.cookies.set(name, value, options)
+    })
+
+    return redirectResponse
+
+  } catch (err) {
+    console.error('OAuth callback exception:', err)
+    return NextResponse.redirect(
+      `${origin}/login?error=${encodeURIComponent(String(err))}`
+    )
+  }
 }
