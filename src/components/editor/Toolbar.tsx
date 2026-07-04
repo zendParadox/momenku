@@ -1,6 +1,7 @@
 'use client'
 
 import { useEditorStore } from '@/lib/editor-store'
+import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react'
 import ThemePicker from './ThemePicker'
 import FontPicker from './FontPicker'
+import { toast } from 'gooey-toast'
 
 export default function Toolbar() {
   const {
@@ -36,17 +38,26 @@ export default function Toolbar() {
     if (!invitationId || isSaving) return
     setSaving(true)
     try {
-      const res = await fetch(`/api/invitations/${invitationId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: invitationTitle,
-          sections: useEditorStore.getState().sections,
-        }),
-      })
-      if (res.ok) setDirty(false)
-    } catch {
-      // silent
+      const supabase = createClient()
+      const state = useEditorStore.getState()
+      const { error } = await supabase
+        .from('invitations')
+        .update({
+          title: state.invitationTitle,
+          sections: state.sections,
+          theme_overrides: state.themeOverrides,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', invitationId)
+
+      if (error) {
+        toast.error({ title: 'Gagal menyimpan', description: error.message })
+      } else {
+        setDirty(false)
+        toast.success({ title: 'Tersimpan' })
+      }
+    } catch (err) {
+      toast.error({ title: 'Gagal menyimpan', description: String(err) })
     } finally {
       setSaving(false)
     }
@@ -54,14 +65,30 @@ export default function Toolbar() {
 
   const handlePublish = async () => {
     if (!invitationId) return
-    await handleSave()
+
+    // Save first if dirty
+    if (isDirty) {
+      await handleSave()
+    }
+
     try {
-      const res = await fetch(`/api/invitations/${invitationId}/publish`, {
-        method: 'POST',
-      })
-      if (res.ok) setPublished(true)
-    } catch {
-      // silent
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('invitations')
+        .update({
+          status: 'published',
+          published_at: new Date().toISOString(),
+        })
+        .eq('id', invitationId)
+
+      if (error) {
+        toast.error({ title: 'Gagal mempublikasi', description: error.message })
+      } else {
+        setPublished(true)
+        toast.success({ title: 'Berhasil dipublikasi!', description: 'Undangan sudah online.' })
+      }
+    } catch (err) {
+      toast.error({ title: 'Gagal mempublikasi', description: String(err) })
     }
   }
 
