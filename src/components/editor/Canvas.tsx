@@ -17,6 +17,7 @@ import CountdownSection from './sections/CountdownSection'
 import MapsSection from './sections/MapsSection'
 import MusicSection from './sections/MusicSection'
 import { GripVertical } from 'lucide-react'
+import PhoneFrame from './PhoneFrame'
 
 const SECTION_COMPONENTS: Record<
   SectionType,
@@ -160,24 +161,18 @@ export default function Canvas() {
         ref={canvasRef}
         onDragOver={handleCanvasDragOver}
         onDrop={handleCanvasDrop}
-        className="mx-auto max-w-[420px] bg-white rounded-2xl shadow-xl overflow-hidden min-h-[600px]"
-        style={{
-          backgroundImage:
-            'linear-gradient(45deg, #f5f5f4 25%, transparent 25%), linear-gradient(-45deg, #f5f5f4 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f5f5f4 75%), linear-gradient(-45deg, transparent 75%, #f5f5f4 75%)',
-          backgroundSize: '20px 20px',
-          backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
-          backgroundColor: '#e7e5e4',
-        }}
+        className="mx-auto"
+        style={{ maxWidth: 430 }}
       >
-        {/* White canvas card */}
-        <div
-          className="bg-white min-h-[600px]"
-          style={{
-            '--theme-primary': (themeOverrides.primaryColor as string) || '#059669',
-            '--theme-font-heading': (themeOverrides.fontHeading as string) || 'Cormorant Garamond',
-            '--theme-font-body': (themeOverrides.fontBody as string) || 'Plus Jakarta Sans',
-          } as React.CSSProperties}
-        >
+        <PhoneFrame showStatusBar={false}>
+          <div
+            className="bg-white min-h-[600px]"
+            style={{
+              '--theme-primary': (themeOverrides.primaryColor as string) || '#059669',
+              '--theme-font-heading': (themeOverrides.fontHeading as string) || 'Cormorant Garamond',
+              '--theme-font-body': (themeOverrides.fontBody as string) || 'Plus Jakarta Sans',
+            } as React.CSSProperties}
+          >
           {sections.length === 0 ? (
             <div
               className="flex flex-col items-center justify-center min-h-[600px] text-center p-8"
@@ -219,7 +214,8 @@ export default function Canvas() {
               />
             ))
           )}
-        </div>
+          </div>
+        </PhoneFrame>
       </div>
     </div>
   )
