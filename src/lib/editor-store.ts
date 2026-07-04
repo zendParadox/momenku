@@ -17,6 +17,7 @@ type EditorState = {
   isPreviewMode: boolean
   isSaving: boolean
   published: boolean
+  themeOverrides: Record<string, string>
 
   // History
   undoStack: Section[][]
@@ -26,6 +27,7 @@ type EditorState = {
   setInvitationId: (id: string) => void
   setInvitationTitle: (title: string) => void
   setPublished: (published: boolean) => void
+  setThemeOverrides: (overrides: Record<string, string>) => void
 
   addSection: (type: SectionType) => string
   updateSection: <T extends SectionType>(
@@ -71,6 +73,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   isPreviewMode: false,
   isSaving: false,
   published: false,
+  themeOverrides: {},
 
   undoStack: [],
   redoStack: [],
@@ -78,6 +81,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   setInvitationId: (id) => set({ invitationId: id }),
   setInvitationTitle: (title) => set({ invitationTitle: title, isDirty: true }),
   setPublished: (published) => set({ published }),
+  setThemeOverrides: (overrides) => set({ themeOverrides: overrides, isDirty: true }),
 
   addSection: (type) => {
     const state = get()
@@ -212,6 +216,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       isPreviewMode: false,
       isSaving: false,
       published: false,
+      themeOverrides: {},
       undoStack: [],
       redoStack: [],
     }),

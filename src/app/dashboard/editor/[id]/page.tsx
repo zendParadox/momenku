@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useEditorStore } from '@/lib/editor-store'
 import SectionPanel from '@/components/editor/SectionPanel'
 import Canvas from '@/components/editor/Canvas'
@@ -11,12 +11,15 @@ import { Menu, X } from 'lucide-react'
 
 export default function EditorPage() {
   const params = useParams()
+  const searchParams = useSearchParams()
+  const templateId = searchParams.get('template')
   const id = params.id as string
   const {
     setInvitationId,
     setInvitationTitle,
     loadSections,
     setPublished,
+    setThemeOverrides,
     sections,
     invitationTitle,
     isDirty,
@@ -50,18 +53,53 @@ export default function EditorPage() {
           .upsert({ id: user.id, full_name: user.user_metadata?.full_name || '' })
           .select()
 
+        // Fetch template data if template ID provided
+        let templateData: Record<string, unknown> | null = null
+        let defaultSections: unknown[] = []
+        let title = 'Undangan Baru'
+
+        if (templateId) {
+          const { data: tpl } = await supabase
+            .from('templates')
+            .select('*')
+            .eq('id', templateId)
+            .single()
+
+          if (tpl) {
+            templateData = tpl
+            defaultSections = tpl.default_sections || []
+            title = `Undangan ${tpl.name}`
+          }
+        }
+
         const { data: newData, error: insertErr } = await supabase
           .from('invitations')
           .insert({
             user_id: user.id,
-            title: 'Undangan Baru',
-            sections: [],
+            title,
+            sections: defaultSections,
             status: 'draft',
+            template_id: templateId || null,
+            theme_overrides: templateData ? {
+              primaryColor: templateData.primary_color,
+              fontHeading: templateData.font_heading,
+              fontBody: templateData.font_body,
+            } : {},
           })
           .select()
           .single()
 
         if (newData) {
+          // Apply template data to editor store before redirect
+          setInvitationTitle(newData.title)
+          loadSections(newData.sections || [])
+          if (templateData) {
+            setThemeOverrides({
+              primaryColor: templateData.primary_color as string,
+              fontHeading: templateData.font_heading as string,
+              fontBody: templateData.font_body as string,
+            })
+          }
           // Replace URL so undo/redo don't re-create
           window.location.replace(`/dashboard/editor/${newData.id}`)
           return
@@ -91,7 +129,7 @@ export default function EditorPage() {
     }
 
     loadInvitation()
-  }, [id, setInvitationId, setInvitationTitle, loadSections, setPublished])
+  }, [id, templateId, setInvitationId, setInvitationTitle, loadSections, setPublished, setThemeOverrides])
 
   // Auto-save every 30 seconds
   const saveData = useCallback(async () => {
