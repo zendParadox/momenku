@@ -1,58 +1,56 @@
 'use client'
 
-import { useMemo } from 'react'
 import type { MapsData } from '@/types/editor'
 
-function getOsmEmbedUrl(mapsUrl: string, address: string): string {
-  // If it's already an embed URL, use as-is
-  if (mapsUrl.includes('/embed')) return mapsUrl
+function getGoogleMapsEmbedUrl(address: string, mapsUrl: string): string {
+  // If user provided a Google Maps embed URL directly, use it
+  if (mapsUrl && mapsUrl.includes('/embed')) return mapsUrl
 
-  // Try to extract coordinates from Google Maps URL
-  // Patterns: @lat,lng or ?q=lat,lng or !2d3d patterns
-  const coordMatch = mapsUrl.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/)
-  if (coordMatch) {
-    return `https://www.openstreetmap.org/export/embed.html?bbox=0.01,${coordMatch[1]},0.02,${coordMatch[2]}&layer=mapnik&marker=${coordMatch[1]},${coordMatch[2]}`
+  // If user provided a Google Maps share URL, convert to embed
+  if (mapsUrl && mapsUrl.includes('google.com/maps')) {
+    // Extract the query part
+    const urlObj = new URL(mapsUrl)
+    const query = urlObj.searchParams.get('q') || urlObj.searchParams.get('query') || ''
+    if (query) {
+      return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=&z=15&ie=UTF8&iwloc=&output=embed`
+    }
   }
 
-  const qCoordMatch = mapsUrl.match(/[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/)
-  if (qCoordMatch) {
-    return `https://www.openstreetmap.org/export/embed.html?bbox=0.01,${qCoordMatch[1]},0.02,${qCoordMatch[2]}&layer=mapnik&marker=${qCoordMatch[1]},${qCoordMatch[2]}`
+  // Use address field for embed
+  if (address) {
+    return `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`
   }
 
-  // Use Nominatim search for address-based embed
-  const query = encodeURIComponent(address || mapsUrl)
-  return `https://www.openstreetmap.org/export/embed.html?bbox=106.7,-6.3,106.9,-6.1&layer=mapnik`
+  return ''
 }
 
-function getOsmLink(mapsUrl: string, address: string): string {
-  if (mapsUrl.includes('openstreetmap.org')) return mapsUrl
-
-  const coordMatch = mapsUrl.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/)
-  if (coordMatch) {
-    return `https://www.openstreetmap.org/?mlat=${coordMatch[1]}&mlon=${coordMatch[2]}#map=15/${coordMatch[1]}/${coordMatch[2]}`
+function getGoogleMapsLink(address: string, mapsUrl: string): string {
+  // If user provided a Google Maps URL, use it directly
+  if (mapsUrl && mapsUrl.includes('google.com/maps')) {
+    // Make sure it's a regular Maps link (not embed)
+    if (mapsUrl.includes('/embed')) {
+      const urlObj = new URL(mapsUrl)
+      const query = urlObj.searchParams.get('q') || urlObj.searchParams.get('query') || ''
+      if (query) {
+        return `https://www.google.com/maps?q=${encodeURIComponent(query)}`
+      }
+    }
+    return mapsUrl
   }
 
-  const qCoordMatch = mapsUrl.match(/[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/)
-  if (qCoordMatch) {
-    return `https://www.openstreetmap.org/?mlat=${qCoordMatch[1]}&mlon=${qCoordMatch[2]}#map=15/${qCoordMatch[1]}/${qCoordMatch[2]}`
+  // Build from address
+  if (address) {
+    return `https://www.google.com/maps?q=${encodeURIComponent(address)}`
   }
 
-  const query = encodeURIComponent(address || 'Jakarta')
-  return `https://www.openstreetmap.org/search?query=${query}`
+  return 'https://www.google.com/maps'
 }
 
 export default function MapsSection({ data }: { data: MapsData }) {
   const primaryColor = 'var(--theme-primary, #059669)'
 
-  const osmUrl = useMemo(
-    () => (data.mapsUrl ? getOsmEmbedUrl(data.mapsUrl, data.address) : ''),
-    [data.mapsUrl, data.address]
-  )
-
-  const osmLink = useMemo(
-    () => (data.mapsUrl ? getOsmLink(data.mapsUrl, data.address) : ''),
-    [data.mapsUrl, data.address]
-  )
+  const embedUrl = getGoogleMapsEmbedUrl(data.address, data.mapsUrl)
+  const mapsLink = getGoogleMapsLink(data.address, data.mapsUrl)
 
   return (
     <div
@@ -86,14 +84,15 @@ export default function MapsSection({ data }: { data: MapsData }) {
       </div>
 
       {/* Map embed or address fallback */}
-      {osmUrl ? (
+      {embedUrl ? (
         <div className="rounded-2xl overflow-hidden shadow-sm border border-stone-100">
           <iframe
-            src={osmUrl}
+            src={embedUrl}
             width="100%"
             height="300"
             style={{ border: 0 }}
             loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
             title="Peta Lokasi"
           />
         </div>
@@ -129,7 +128,7 @@ export default function MapsSection({ data }: { data: MapsData }) {
             className="text-stone-400 text-xs mt-1"
             style={{ fontFamily: 'var(--theme-font-body)' }}
           >
-            Masukkan URL peta di panel properti untuk menampilkan peta
+            Masukkan alamat atau URL Google Maps di panel properti
           </p>
         </div>
       )}
@@ -146,21 +145,24 @@ export default function MapsSection({ data }: { data: MapsData }) {
         </div>
       )}
 
-      {/* Open in Maps button */}
-      {osmLink && (
+      {/* Open in Google Maps button */}
+      {data.address && (
         <div className="mt-4 text-center">
           <a
-            href={osmLink}
+            href={mapsLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block px-6 py-2.5 rounded-xl border text-sm font-medium transition-colors hover:opacity-80"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl border text-sm font-medium transition-colors hover:opacity-80"
             style={{
               borderColor: primaryColor,
               color: primaryColor,
               fontFamily: 'var(--theme-font-body)',
             }}
           >
-            Buka di Peta
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            Buka di Google Maps
           </a>
         </div>
       )}
