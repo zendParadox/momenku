@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+/* ── Tailwind v4 Theme Tokens ── */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-border: var(--border);
+
+  --font-jakarta: var(--font-jakarta);
+  --font-cormorant: var(--font-cormorant);
+  --font-script: var(--font-script);
+}
+
+/* ── Light Theme ── */
+:root {
+  --background: #fafaf9;
+  --foreground: #1c1917;
+  --primary: #059669;
+  --primary-light: #d1fae5;
+  --accent: #f59e0b;
+  --muted: #78716c;
+  --card: #ffffff;
+  --border: #e7e5e4;
+}
+
+/* ── Dark Theme ── */
+html.dark {
+  --background: #0c0a09;
+  --foreground: #fafaf9;
+  --primary: #34d399;
+  --primary-light: #064e3b;
+  --accent: #fbbf24;
+  --muted: #a8a29e;
+  --card: #1c1917;
+  --border: #292524;
+}
+
+/* ── Base Layer ── */
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 9999px;
+}
+
+/* ── Selection ── */
+::selection {
+  background-color: #34d399;
+  color: #022c22;
+}
